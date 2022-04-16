@@ -140,5 +140,5 @@ def play(num_players: int, num_cases: int, interactive: bool) -> None:
     return game_data
 
 if __name__ == "__main__":
-    game_data = play(1, 3, interactive=False)
+    game_data = play(1, 3, interactive=True)
     print(game_data)
