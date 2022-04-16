@@ -27,6 +27,6 @@ def write_to_csv(df: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    df = simulate(100)
+    df = simulate(2000)
     # write_to_sql(df)
     write_to_csv(df)
