@@ -1,6 +1,6 @@
 # Game Engine - Organizer + necessary objects
 from random import randint
-from typing import List, Tuple
+from typing import List
 
 class Briefcase:
     def __init__(self, number: int, wins: bool) -> None:
