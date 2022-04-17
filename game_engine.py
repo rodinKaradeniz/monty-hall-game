@@ -1,12 +1,11 @@
 # Game Engine - Organizer + necessary objects
 from random import randint
-from typing import List
+from typing import List, Tuple
 
 class Briefcase:
     def __init__(self, number: int, wins: bool) -> None:
         self.wins = wins
         self.number = number
-        self.picked = False 
 
     def set_wins(self, wins: bool) -> None:
         self.wins = wins
@@ -16,12 +15,6 @@ class Briefcase:
 
     def get_number(self) -> int:
         return self.number
-
-    def change_picked_status(self) -> None:
-        self.picked = not self.picked
-
-    def get_picked_status(self) -> bool:
-        return self.picked
 
 
 class GameEngine:
@@ -46,23 +39,44 @@ class GameEngine:
             i += 1
         print(s)
 
-    def get_case(self, number: int, available: bool) -> Briefcase:
-        case_list = self.available_cases if available else self.picked_cases
-        for case in case_list:
-            if case_list[case].get_number() == number:
-                return case_list[case]
+    def find_case(self, number: int, available: bool) -> Briefcase:
+        if available:
+            for case in self.available_cases:
+                if self.available_cases[case].get_number() == number:
+                    return self.available_cases[case]
+
+            # Look for an exception in picked_cases
+            for case in self.picked_cases:
+                if self.picked_cases[case].get_number() == number:
+                    raise Exception("Case already picked")
+
+        else:
+            for case in self.picked_cases:
+                if self.picked_cases[case].get_number() == number:
+                    return self.picked_cases[case]
+
+            # Look for an exception in picked_cases
+            for case in self.available_cases:
+                if self.available_cases[case].get_number() == number:
+                    raise Exception("Case has not been picked")
 
         raise Exception("Case not found")
+
+    def get_case_status(self, number: int, available: bool) -> bool:
+        return self.find_case(number, available).get_wins()
 
     def get_winning_case_number(self) -> int:
         return self.winning_case_number
 
     def update_case(self, number: int, available: bool) -> None:
+        # Check if case exists and in the right place
+        chosen_case = self.find_case(number, available)
+    
         if available:
-            chosen_case = self.available_cases.pop(number)
+            self.available_cases.pop(number)
             self.picked_cases[number] = chosen_case
         else:
-            chosen_case = self.picked_cases.pop(number)
+            self.picked_cases.pop(number)
             self.available_cases[number] = chosen_case
 
     def get_random_case(self) -> Briefcase:

@@ -115,22 +115,23 @@ def play(num_players: int, num_cases: int, interactive: bool) -> None:
 
     # Open chosen briefcase(s)
     for current_player in players:
-        current_case = game.get_case(current_player.get_case_number(), available = False)
+        current_case_number = current_player.get_case_number()
+        current_case_status = game.get_case_status(current_case_number, available = False)
 
         if interactive:
             print(f"Player {current_player.get_number()},")
-            print(f"You have briefcase {current_player.get_case_number()}.")
+            print(f"You have briefcase {current_case_number}.")
 
             # Check player's briefcase
-            if current_case.get_wins():
-                print(f"Briefcase {current_case.get_number()} contains the price!")
+            if current_case_status:
+                print(f"Briefcase {current_case_number} contains the price!")
                 print(f"Player {current_player.get_number()} wins.")
             else:
-                print(f"Briefcase {current_case.get_number()} does not contain the price.")
+                print(f"Briefcase {current_case_number} does not contain the price.")
                 print(f"Player {current_player.get_number()} loses.")
 
         # update game_data
-        game_data["wins"] = True if current_case.get_wins() else False
+        game_data["wins"] = True if current_case_status else False
 
     # End
     if interactive:
